@@ -8,3 +8,6 @@ This space is dedicated to exploring datasets, testing analytical methods, and b
 
 
 The goal of this repository is to document my learning journey in Data Science through practical experimentation and real-world data analysis
+
+
+1st Project- Motion Analyzer = npx plugins add vercel/vercel-plugin
