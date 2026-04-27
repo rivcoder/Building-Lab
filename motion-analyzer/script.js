@@ -80,6 +80,12 @@ function renderGraph(type = "all") {
 // =========================
 videoInput?.addEventListener("change", () => {
     const file = videoInput.files?.[0];
+    const fileNameSpan = document.getElementById("file-name");
+    
+    if (file && fileNameSpan) {
+        fileNameSpan.textContent = "📁 " + file.name;
+    }
+    
     if (!file || !canvas) return;
 
     const video = document.createElement("video");
@@ -100,23 +106,58 @@ videoInput?.addEventListener("change", () => {
 });
 
 // =========================
-// CALIBRATION CLICK
+// CALIBRATION CLICK (2-POINT)
 // =========================
+let calibrationPoints = [];
+
 canvas?.addEventListener("click", (e) => {
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    
+    // Calculate scale between on-screen canvas and real canvas
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
 
-    selectedPoint = { x, y };
+    if (calibrationPoints.length >= 2) {
+        calibrationPoints = [];
+        // Optional: you could clear canvas drawing here if needed
+    }
+
+    calibrationPoints.push({ x, y });
 
     const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "#00ffcc";
     ctx.beginPath();
-    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.arc(x, y, 6, 0, Math.PI * 2);
     ctx.fill();
 
-    explanationDiv.innerHTML =
-        `<p style="color:#00ffcc;">Calibration point selected ✔ (${x.toFixed(1)}, ${y.toFixed(1)})</p>`;
+    if (calibrationPoints.length === 1) {
+        explanationDiv.innerHTML =
+            `<p style="color:#00ffcc;">Point 1 selected. Click a second point to set reference distance.</p>`;
+    } else if (calibrationPoints.length === 2) {
+        const dx = calibrationPoints[1].x - calibrationPoints[0].x;
+        const dy = calibrationPoints[1].y - calibrationPoints[0].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        
+        // Auto-fill the form input
+        const refInput = document.querySelector('input[name="ref_pixels"]');
+        if (refInput) {
+            refInput.value = dist.toFixed(1);
+        }
+
+        // Draw line
+        ctx.strokeStyle = "#00ffcc";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(calibrationPoints[0].x, calibrationPoints[0].y);
+        ctx.lineTo(calibrationPoints[1].x, calibrationPoints[1].y);
+        ctx.stroke();
+
+        explanationDiv.innerHTML =
+            `<p style="color:#00ffcc;">Calibration successful! Distance is ${dist.toFixed(1)} px. The Reference Pixels form input has been automatically updated.</p>`;
+    }
 });
 
 // =========================
@@ -130,11 +171,6 @@ form?.addEventListener("submit", async (e) => {
     explanationDiv.innerHTML = "";
 
     const formData = new FormData(form);
-
-    if (selectedPoint) {
-        formData.append("x", selectedPoint.x);
-        formData.append("y", selectedPoint.y);
-    }
 
     try {
         const res = await fetch("/analyze", {
@@ -285,3 +321,5 @@ reportBtn?.addEventListener("click", async () => {
 
     doc.save("Motion_Report.pdf");
 });
+
+
