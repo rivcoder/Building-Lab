@@ -8,12 +8,51 @@
 /* ================= BODY ================= */
 body {
     font-family: "Inter", sans-serif;
-    background:
-        radial-gradient(circle at 20% 20%, rgba(139,92,246,0.15), transparent 40%),
-        radial-gradient(circle at 80% 30%, rgba(236,72,153,0.12), transparent 40%),
-        linear-gradient(135deg, #0B0F1A, #05070D);
-    color: #ffffff;
+    background-color: #030508;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 50%),
+        radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.06), transparent 50%);
+    color: #e2e8f0;
     overflow-x: hidden;
+    min-height: 100vh;
+}
+
+h1, h2, h3, h4, .analyze-btn {
+    font-family: "Outfit", sans-serif;
+}
+
+/* ================= ANIMATED ORBS ================= */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: -1;
+    animation: drift 15s infinite alternate ease-in-out;
+}
+
+.orb-1 {
+    width: 400px; height: 400px;
+    background: rgba(139, 92, 246, 0.2);
+    top: -100px; left: -100px;
+}
+
+.orb-2 {
+    width: 500px; height: 500px;
+    background: rgba(236, 72, 153, 0.15);
+    bottom: -200px; right: -100px;
+    animation-delay: -5s;
+}
+
+.orb-3 {
+    width: 300px; height: 300px;
+    background: rgba(59, 130, 246, 0.15);
+    top: 40%; left: 50%;
+    animation-delay: -10s;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(60px, 40px) scale(1.1); }
 }
 
 /* ================= HERO ================= */
@@ -25,20 +64,30 @@ body {
 }
 
 .hero h1 {
-    font-size: 42px;
-    font-weight: 700;
+    font-size: 56px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff, #a78bfa);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
 }
 
 .subtitle {
-    color: #A0A3BD;
+    color: #a78bfa;
+    font-weight: 500;
+    font-size: 18px;
     margin-top: 10px;
+    letter-spacing: 0.5px;
 }
 
 .desc {
     max-width: 600px;
     margin: 15px auto;
-    color: #A0A3BD;
-    font-size: 14px;
+    color: #94a3b8;
+    font-size: 15px;
+    line-height: 1.6;
 }
 
 /* animated glow */
@@ -69,20 +118,23 @@ body {
 
 /* ================= GLASS ================= */
 .glass {
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(18px);
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow:
-        0 20px 60px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-
-    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
 }
 
 .glass:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 25px 70px rgba(0,0,0,0.75);
+    transform: translateY(-6px);
+    box-shadow: 
+        0 12px 30px -4px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ================= LEFT PANEL ================= */
@@ -115,6 +167,47 @@ input {
 
     box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
     transition: all 0.25s ease;
+}
+
+input[type="file"] {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* File Upload Drag & Drop Style */
+.file-upload {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    border: 2px dashed rgba(139,92,246,0.5);
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload:hover {
+    border-color: #8b5cf6;
+    background: rgba(139,92,246,0.1);
+}
+
+.file-upload input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+#file-name {
+    color: #A0A3BD;
+    font-size: 14px;
+    font-weight: 500;
 }
 
 input:focus {
