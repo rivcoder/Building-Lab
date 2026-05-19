@@ -37,6 +37,8 @@ Uses computer vision to detect and analyze human motion from video input. The fr
 `Python` `OpenCV` `Deep Learning` `Flask`
 
 > 🔗 *Frontend deployed · Backend in development*
+
+
 https://motion-analyzer-nu.vercel.app/
 ---
 
