@@ -39,7 +39,7 @@ Uses computer vision to detect and analyze human motion from video input. The fr
 > 🔗 *Frontend deployed · Backend in development*
 
 
-https://motion-analyzer-nu.vercel.app/
+> 🔗 https://motion-analyzer-nu.vercel.app/
 ---
 
 ## 🛠 Stack
